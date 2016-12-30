@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.1'
+version = '0.0.2'
 
 REQUIREMENTS = [
     'lxml',
@@ -10,7 +10,9 @@ REQUIREMENTS = [
 ]
 
 PACKAGES = [
-    'mwstools'
+    'mwstools',
+    'mwstools.parsers',
+    'mwstools.requesters'
 ]
 
 setup(
