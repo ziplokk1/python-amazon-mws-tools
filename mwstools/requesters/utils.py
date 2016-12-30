@@ -7,6 +7,7 @@ responses_dir = os.path.join(requesters_dir, 'responses')
 
 
 def write_response(response, fname):
+    return
     with open(os.path.join(responses_dir, fname), 'wb') as f:
         if isinstance(response, DictWrapper):
             f.write(response.original)
