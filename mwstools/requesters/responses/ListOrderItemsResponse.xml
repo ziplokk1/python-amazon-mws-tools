@@ -1,5 +1,19 @@
-
-    <ListOrderItemsResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01">
-        <Empty />
-    </ListOrderItemsResponse>
-    
+<?xml version="1.0"?>
+<ListOrderItemsResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01">
+  <ListOrderItemsResult>
+    <OrderItems>
+      <OrderItem>
+        <QuantityOrdered>1</QuantityOrdered>
+        <Title>ChiaoGoo Circular 16-inch (41cm) Bamboo Dark Patina Knitting Needle; Size US 15 (10mm) 2016-15</Title>
+        <ASIN>B00DX86HQC</ASIN>
+        <SellerSKU>FBA-CHG-2016-15-1-OFF-5.25-COM-HQC</SellerSKU>
+        <OrderItemId>08498184233202</OrderItemId>
+        <QuantityShipped>0</QuantityShipped>
+      </OrderItem>
+    </OrderItems>
+    <AmazonOrderId>108-7588499-1868204</AmazonOrderId>
+  </ListOrderItemsResult>
+  <ResponseMetadata>
+    <RequestId>28e3c84f-9e8b-430b-8b1b-7df67a459f85</RequestId>
+  </ResponseMetadata>
+</ListOrderItemsResponse>
