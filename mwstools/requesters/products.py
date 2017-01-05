@@ -15,7 +15,7 @@ class GetCompetitivePricingForAsinRequester(object):
 
     @raise_for_error
     def _request(self, asins, marketplaceid):
-        response = self.api.get_competitive_pricing_for_asin(asins, marketplaceid)
+        response = self.api.get_competitive_pricing_for_asin(marketplaceid, asins)
         write_response(response, 'GetCompetitivePricingForAsinResponse.xml')
         response.raise_for_status()
         return response.content
