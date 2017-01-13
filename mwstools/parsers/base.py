@@ -41,7 +41,7 @@ def parse_bool(f):
         r = f(*args, **kwargs)
         if not r:
             return None
-        return r == 'true'
+        return r.lower() == 'true'
     return inner
 
 
