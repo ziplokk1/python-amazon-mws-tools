@@ -1,6 +1,6 @@
 import urllib
 
-from requests import request
+from requests import request, Session
 from mws.mws import MWS, remove_empty, DictWrapper, DataWrapper
 
 try:
@@ -16,6 +16,10 @@ class _MWS(MWS):
     This way we can catch any request errors that go out and so that the parsers will work properly since they
     have to read the raw xml body.
     """
+
+    def __init__(self, *args, **kwargs):
+        MWS.__init__(self, *args, **kwargs)
+        self.session = Session()
 
     def request(self, extra_data, method="GET", **kwargs):
         """
@@ -42,7 +46,7 @@ class _MWS(MWS):
         headers = {'User-Agent': 'python-amazon-mws/0.0.1 (Language=Python)'}
         headers.update(kwargs.get('extra_headers', {}))
 
-        return request(method, url, data=kwargs.get('body', ''), headers=headers)
+        return self.session.request(method, url, data=kwargs.get('body', ''), headers=headers)
 
     def make_request(self, extra_data, method="GET", **kwargs):
         """
