@@ -18,8 +18,13 @@ class _MWS(MWS):
     """
 
     def __init__(self, *args, **kwargs):
+        session = kwargs.get('session')
+        if session:
+            kwargs.pop('session')
+        else:
+            session = Session()
+        self.session = session
         MWS.__init__(self, *args, **kwargs)
-        self.session = Session()
 
     def request(self, extra_data, method="GET", **kwargs):
         """

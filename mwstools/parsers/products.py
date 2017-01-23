@@ -167,14 +167,26 @@ class Product(BaseElementWrapper):
     def number_of_offer_listings(self):
         return [OfferListingCount(x) for x in self.product.xpath('./a:CompetitivePricing/a:NumberOfOfferListings//a:OfferListingCount')]
 
+    def number_of_new_offer_listings(self):
+        l = filter(lambda x: x.condition.lower() == 'new', self.number_of_offer_listings())
+        if not l:
+            return
+        return l[0].count
+
     def sales_rankings(self):
         return [SalesRank(x) for x in self.product.xpath('./a:SalesRankings//a:SalesRank')]
 
-    def website_ranking(self):
+    def _website_sales_rank_element(self):
         l = filter(lambda x: 'display_on_website' in x.product_category_id, self.sales_rankings())
         if not l:
-            return
-        return l[0].rank
+            return None, None
+        return l[0].product_category_id, l[0].rank
+
+    def website_ranking(self):
+        return self._website_sales_rank_element()[1]
+
+    def website_category(self):
+        return self._website_sales_rank_element()[0]
 
     def is_success(self):
         return self.status == 'Success'
@@ -310,6 +322,14 @@ class LowestOfferListing(BaseElementWrapper):
     @first_element
     def multiple_offers_at_lowest_price(self):
         return self.xpath('./a:MultipleOffersAtLowestPrice/text()')
+
+    def __repr__(self):
+        return '<{} item_condition={} fulfillment_channel={} landed_price={}>'.format(
+            self.__class__.__name__,
+            self.item_condition,
+            self.fulfillment_channel,
+            self.landed_price
+        )
 
 
 class LowestOfferListingProduct(BaseElementWrapper):
