@@ -1,6 +1,6 @@
 import logging
 
-from ..parsers.products import GetCompetitivePricingForAsinResponse, GetLowestOfferListingsForAsinResponse, GetMatchingProductForIdResponse
+from ..parsers.products import GetCompetitivePricingForAsinResponse, GetLowestOfferListingsForAsinResponse, GetMatchingProductForIdResponse, GetMyFeesEstimateResponse
 from ..requesters.base import raise_response_for_error
 from ..mws_overrides import OverrideProducts
 
@@ -66,4 +66,28 @@ class GetMatchingProductForIdRequester(object):
     def results_from_response(cls, response):
         gmpfir = GetMatchingProductForIdResponse.load(response.content)
         for result in gmpfir.results():
+            yield result
+
+
+class GetMyFeesEstimateRequester(object):
+
+    def __init__(self, *args, **kwargs):
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.api = OverrideProducts(*args, **kwargs)
+
+    @raise_response_for_error
+    def _request(self, marketplaceid, asins=()):
+        estimate_requests = [self.api.gen_fees_estimate_request(marketplaceid, a, identifier='request-{}'.format(a)) for a in asins]
+        response = self.api.get_my_fees_estimate(estimate_requests)
+        response.raise_for_status()
+        return response
+
+    def request(self, marketplaceid, asins=()):
+        response = self._request(marketplaceid, asins)
+        return GetMyFeesEstimateRequester.results_from_response(response)
+
+    @classmethod
+    def results_from_response(cls, response):
+        gmfer = GetMyFeesEstimateResponse.load(response.content)
+        for result in gmfer.fees_estimate_result_list:
             yield result

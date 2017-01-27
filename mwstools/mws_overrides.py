@@ -231,6 +231,97 @@ class OverrideProducts(_MWS):
         data.update(self.enumerate_param('ASINList.ASIN.', asins))
         return self.request(data)
 
+    def flatten(self, l_key, l_val, d):
+        """
+        Flatten a dictionary which holds urlparams.
+
+        Used when generating a requests urlparams which have a list.
+        Example: GetMyFeesEstimate needs a FeesEstimateRequestList enumerated list parameter.
+        :param l_key: List key. The Key to use for the enumeration. ex FeesEstimateRequestList
+        :param l_val: List value. The value to use for the enumeration. ex FeesEstimateRequest
+        :return: Flattened dictionary which can then be urlencoded to make the signature string.
+        """
+        nd = {}
+        for k, v in d.items():
+            if isinstance(v, dict):
+                for k_, v_ in v.items():
+                    nd[k_] = self.flatten(l_key, l_val, v_)
+            elif isinstance(v, list):
+                # enumerate the list parameters so that its formatted in the correct way for the url parameters.
+                # ex. FeesEstimateRequestList.FeesEstimateRequest.1.IdValue
+                # <List Key>.<List Value>.<Enumeration Index>.<Dict Key>
+                for i, fee_estimate_request in enumerate(v, 1):
+                    for k_, v_ in fee_estimate_request.items():
+                        nd['{}.{}.{}.{}'.format(l_key, l_val, i, k_)] = v_
+            else:
+                nd[k] = v
+        return nd
+
+    def fmt_bool(self, b):
+        """
+        Format boolean to be used with url parameters.
+        :param b:
+        :return:
+        """
+        return 'true' if b else 'false'
+
+    def gen_fees_estimate_request(self, marketplace_id, id_value, id_type='ASIN', is_amazon_fulfilled=True, identifier='request-1', shipping=0.0, listing_price=100.0, currency_code='USD'):
+        """
+        Generate a fees estimate request element for the url parameters.
+
+        - See http://docs.developer.amazonservices.com/en_US/products/Products_Datatypes.html#FeesEstimateRequest.
+
+        :param marketplace_id: Marketplace ID
+        :param id_value: The product identifier.
+        :param id_type: The type of product identifier used by IdValue. (ASIN, SellerSKU)
+        :param is_amazon_fulfilled: true if the offer is fulfilled by amazon.
+        :param identifier: A unique value that will identify this request
+        :param shipping: The currency amount for the shipping parameter.
+        :param listing_price: The currency amount for the listing price parameter.
+        :param currency_code:
+        :return: A dict which contains values to be fed into get_my_fees_estimate.
+        """
+
+        lp = '%02f' % listing_price
+        sp = '%02f' % shipping
+        return {
+            'MarketplaceId': marketplace_id,
+            'IdType': id_type,
+            'IdValue': id_value,
+            'IsAmazonFulfilled': self.fmt_bool(is_amazon_fulfilled),
+            'Identifier': identifier,
+            'PriceToEstimateFees.ListingPrice.CurrencyCode': currency_code,
+            'PriceToEstimateFees.ListingPrice.Amount': lp,
+            'PriceToEstimateFees.Shipping.CurrencyCode': currency_code,
+            'PriceToEstimateFees.Shipping.Amount': sp
+        }
+
+    def get_my_fees_estimate(self, estimate_requests=()):
+        """
+        http://docs.developer.amazonservices.com/en_US/products/Products_GetMyFeesEstimate.html
+
+        To use, create your estimate request element first with gen_fees_estimate_request.
+        Create a list to hold your generated fees estimate request dicts.
+        Pass the list to estimate_requests parameter.
+
+        usage:
+
+        >>> api = OverrideProducts('access_key', 'secret_key', 'account_id')
+        >>> asins = ['asin-1', 'asin-2']  # up to 10 asins.
+        >>> estimate_requests = [api.gen_fees_estimate_request('marketplace_id', x) for x in asins]
+        >>> response = api.get_my_fees_estimate(estimate_requests)
+        >>> print response.original
+
+        :param estimate_requests: The list of estimate request dicts.
+        :return:
+        """
+        params = {
+            'FeesEstimateRequestList': estimate_requests,
+            'Action': 'GetMyFeesEstimate'
+        }
+        params = self.flatten('FeesEstimateRequestList', 'FeesEstimateRequest', params)
+        return self.request(params)
+
 
 class OverrideReports(_MWS):
     """ Amazon MWS Reports API """
