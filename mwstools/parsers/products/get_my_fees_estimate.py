@@ -1,4 +1,5 @@
 from ..base import BaseElementWrapper, first_element, parse_bool, parse_date
+from .errors import FeesError
 
 
 class FeeDetail(BaseElementWrapper):
@@ -137,6 +138,14 @@ class FeesEstimateResult(BaseElementWrapper):
     @first_element
     def time_of_fees_estimation(self):
         return self.xpath('./a:FeesEstimate/a:TimeOfFeesEstimation/text()')
+
+    @property
+    @first_element
+    def _error(self):
+        return self.xpath('./a:Error')
+
+    def as_error(self):
+        return FeesError(self._error, self.id_value, self.status)
 
 
 class GetMyFeesEstimateResponse(BaseElementWrapper):
