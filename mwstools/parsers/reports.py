@@ -167,6 +167,14 @@ class ReportInfo(BaseElementWrapper):
     def available_date(self):
         return self.xpath('./a:AvailableDate/text()')
 
+    def __repr__(self):
+        return '<{} report_type={} report_id={} available_date={}>'.format(
+            self.__class__.__name__,
+            self.report_type,
+            self.report_id,
+            self.available_date
+        )
+
 
 class GetReportListResponse(BaseElementWrapper):
 
@@ -199,3 +207,10 @@ class GetReportListResponse(BaseElementWrapper):
 
     def report_info_list(self):
         return [ReportInfo(x) for x in self.xpath('./a:GetReportListResult//a:ReportInfo')]
+
+    def __repr__(self):
+        return '<{} has_next={} report_info_list={}>'.format(
+            self.__class__.__name__,
+            self.has_next,
+            self.report_info_list()
+        )
