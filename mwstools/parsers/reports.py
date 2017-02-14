@@ -118,3 +118,84 @@ class ReportRequestInfo(BaseElementWrapper):
     def started_processing_date(self):
         return self.xpath('./a:StartedProcessingDate/text()')
 
+
+class ReportInfo(BaseElementWrapper):
+
+    namespaces = {
+        'a': 'http://mws.amazonaws.com/doc/2009-01-01/'
+    }
+
+    attrs = {
+        'report_type',
+        'acknowledged',
+        'acknowledged_date',
+        'report_id',
+        'report_request_id',
+        'available_date'
+    }
+
+    @property
+    @first_element
+    def report_type(self):
+        return self.xpath('./a:ReportType/text()')
+
+    @property
+    @parse_bool
+    @first_element
+    def acknowledged(self):
+        return self.xpath('./a:Acknowledged/text()')
+
+    @property
+    @parse_date
+    @first_element
+    def acknowledged_date(self):
+        return self.xpath('./a:AcknowledgedDate/text()')
+
+    @property
+    @first_element
+    def report_id(self):
+        return self.xpath('./a:ReportId/text()')
+
+    @property
+    @first_element
+    def report_request_id(self):
+        return self.xpath('./a:ReportRequestId/text()')
+
+    @property
+    @parse_date
+    @first_element
+    def available_date(self):
+        return self.xpath('./a:AvailableDate/text()')
+
+
+class GetReportListResponse(BaseElementWrapper):
+
+    namespaces = {
+        'a': 'http://mws.amazonaws.com/doc/2009-01-01/'
+    }
+
+    attrs = {
+        'has_next',
+        'next_token',
+        'request_id',
+        'report_info_list'
+    }
+
+    @property
+    @parse_bool
+    @first_element
+    def has_next(self):
+        return self.xpath('./a:GetReportListResult/a:HasNext/text()')
+
+    @property
+    @first_element
+    def next_token(self):
+        return self.xpath('./a:GetReportListResult/a:NextToken/text()')
+
+    @property
+    @first_element
+    def request_id(self):
+        return self.xpath('./a:ResponseMetadata/a:RequestId/text()')
+
+    def report_info_list(self):
+        return [ReportInfo(x) for x in self.xpath('./a:GetReportListResult//a:ReportInfo')]
