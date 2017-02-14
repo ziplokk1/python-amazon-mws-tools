@@ -1,4 +1,7 @@
 from unittest import TestCase
+from unittest import TestSuite
+from unittest import main
+from unittest import makeSuite
 
 from mwstools.parsers.reports import GetReportListResponse
 
@@ -61,4 +64,20 @@ class TestGetReportListResponse(TestCase):
 
     def test_report_info_list(self):
         self.assertEqual(len(self.parser.report_info_list()), 10)
+
+
+__all__ = [
+    TestGetReportListResponse
+]
+
+
+def suite():
+    s = TestSuite()
+    for a in __all__:
+        s.addTest(makeSuite(a))
+    return s
+
+
+if __name__ == '__main__':
+    main(defaultTest='suite')
 
