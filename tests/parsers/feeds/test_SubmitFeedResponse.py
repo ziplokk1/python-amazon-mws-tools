@@ -9,15 +9,15 @@ from mwstools.parsers.feeds import SubmitFeedResponse, FeedSubmissionInfo
 class TestSubmitFeedResponse(TestCase):
     body = """
     <SubmitFeedResponse xmlns="http://mws.amazonaws.com/doc/2009-01-01/">
-<SubmitFeedResult>
-  <FeedSubmissionInfo>
-    <Empty />
-  </FeedSubmissionInfo>
-</SubmitFeedResult>
-<ResponseMetadata>
-  <RequestId>request-id</RequestId>
-</ResponseMetadata>
-</SubmitFeedResponse>
+    <SubmitFeedResult>
+        <FeedSubmissionInfo>
+            <Empty />
+        </FeedSubmissionInfo>
+    </SubmitFeedResult>
+    <ResponseMetadata>
+        <RequestId>request-id</RequestId>
+    </ResponseMetadata>
+    </SubmitFeedResponse>
     """
 
     def setUp(self):
