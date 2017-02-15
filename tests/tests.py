@@ -1,6 +1,6 @@
 import unittest
 
-from parsers import products_suite, orders_suite, errors_suite, reports_suite, notifications_suite
+from parsers import products_suite, orders_suite, errors_suite, reports_suite, notifications_suite, feeds_suite
 from requesters import reports_suite as requesters_reports_suite, orders_suite as requesters_orders_suite
 from test_misc import suite as misc_suite
 
@@ -15,6 +15,7 @@ def suite():
     s.addTest(misc_suite())
     s.addTest(requesters_reports_suite())
     s.addTest(requesters_orders_suite())
+    s.addTest(feeds_suite())
     return s
 
 if __name__ == '__main__':

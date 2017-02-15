@@ -3,3 +3,4 @@ from orders import suite as orders_suite
 from test_ErrorResponse import suite as errors_suite
 from reports import suite as reports_suite
 from notifications import suite as notifications_suite
+from feeds import suite as feeds_suite
