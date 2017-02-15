@@ -76,7 +76,8 @@ class TestGetFeedSubmissionListResponseNextToken(TestCase):
 
 
 __all__ = [
-    TestGetFeedSubmissionListResponseNoNextToken
+    TestGetFeedSubmissionListResponseNoNextToken,
+    TestGetFeedSubmissionListResponseNextToken
 ]
 
 
