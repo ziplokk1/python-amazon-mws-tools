@@ -1,7 +1,7 @@
 import urllib
 
 from requests import request, Session
-from mws.mws import MWS, remove_empty, DictWrapper, DataWrapper
+from mws.mws import MWS, remove_empty, DictWrapper, DataWrapper, calc_md5
 
 try:
     from xml.etree.ElementTree import ParseError as XMLError
@@ -71,6 +71,67 @@ class _MWS(MWS):
         # Store the response object in the parsed_response for quick access
         parsed_response.response = response
         return parsed_response
+
+
+class OverrideFeeds(_MWS):
+    """ Amazon MWS Feeds API """
+
+    ACCOUNT_TYPE = "Merchant"
+
+    def submit_feed(self, feed, feed_type, marketplaceids=None,
+                    content_type="text/xml", purge=False):
+        """
+        Uploads a feed ( xml or .tsv ) to the seller's inventory.
+        Can be used for creating/updating products on Amazon.
+        """
+        purge = 'true' if purge else 'false'
+        data = dict(Action='SubmitFeed',
+                    FeedType=feed_type,
+                    PurgeAndReplace=purge)
+        data.update(self.enumerate_param('MarketplaceIdList.Id.', marketplaceids))
+        md = calc_md5(feed)
+        return self.request(data, method="POST", body=feed,
+                            extra_headers={'Content-MD5': md, 'Content-Type': content_type})
+
+    def get_feed_submission_list(self, feedids=None, max_count=None, feedtypes=None,
+                                 processingstatuses=None, fromdate=None, todate=None):
+        """
+        Returns a list of all feed submissions submitted in the previous 90 days.
+        That match the query parameters.
+        """
+
+        data = dict(Action='GetFeedSubmissionList',
+                    MaxCount=max_count,
+                    SubmittedFromDate=fromdate,
+                    SubmittedToDate=todate, )
+        data.update(self.enumerate_param('FeedSubmissionIdList.Id', feedids))
+        data.update(self.enumerate_param('FeedTypeList.Type.', feedtypes))
+        data.update(self.enumerate_param('FeedProcessingStatusList.Status.', processingstatuses))
+        return self.request(data)
+
+    def get_submission_list_by_next_token(self, token):
+        data = dict(Action='GetFeedSubmissionListByNextToken', NextToken=token)
+        return self.request(data)
+
+    def get_feed_submission_count(self, feedtypes=None, processingstatuses=None, fromdate=None, todate=None):
+        data = dict(Action='GetFeedSubmissionCount',
+                    SubmittedFromDate=fromdate,
+                    SubmittedToDate=todate)
+        data.update(self.enumerate_param('FeedTypeList.Type.', feedtypes))
+        data.update(self.enumerate_param('FeedProcessingStatusList.Status.', processingstatuses))
+        return self.request(data)
+
+    def cancel_feed_submissions(self, feedids=None, feedtypes=None, fromdate=None, todate=None):
+        data = dict(Action='CancelFeedSubmissions',
+                    SubmittedFromDate=fromdate,
+                    SubmittedToDate=todate)
+        data.update(self.enumerate_param('FeedSubmissionIdList.Id.', feedids))
+        data.update(self.enumerate_param('FeedTypeList.Type.', feedtypes))
+        return self.request(data)
+
+    def get_feed_submission_result(self, feedid):
+        data = dict(Action='GetFeedSubmissionResult', FeedSubmissionId=feedid)
+        return self.request(data)
 
 
 class OverrideOrders(_MWS):
@@ -265,7 +326,8 @@ class OverrideProducts(_MWS):
         """
         return 'true' if b else 'false'
 
-    def gen_fees_estimate_request(self, marketplace_id, id_value, id_type='ASIN', is_amazon_fulfilled=True, identifier='request-1', shipping=0.0, listing_price=100.0, currency_code='USD'):
+    def gen_fees_estimate_request(self, marketplace_id, id_value, id_type='ASIN', is_amazon_fulfilled=True,
+                                  identifier='request-1', shipping=0.0, listing_price=100.0, currency_code='USD'):
         """
         Generate a fees estimate request element for the url parameters.
 
