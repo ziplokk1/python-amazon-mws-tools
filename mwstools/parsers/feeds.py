@@ -60,6 +60,11 @@ class SubmitFeedResponse(BaseElementWrapper):
     @property
     @first_element
     def feed_submission_info(self):
+        """
+
+        :return:
+        :rtype: FeedSubmissionInfo
+        """
         return [FeedSubmissionInfo(x) for x in self.xpath('./a:SubmitFeedResult/a:FeedSubmissionInfo')]
 
     @property
@@ -70,7 +75,7 @@ class SubmitFeedResponse(BaseElementWrapper):
     def __repr__(self):
         return '<{} feed_submission_info={} request_id={}>'.format(
             self.__class__.__name__,
-            self.feed_submission_info,
+            repr(self.feed_submission_info),
             self.request_id
         )
 
@@ -105,6 +110,6 @@ class GetFeedSubmissionListResponse(BaseElementWrapper):
     def __repr__(self):
         return '<{} feed_submission_info={} request_id={}>'.format(
             self.__class__.__name__,
-            self.feed_submission_info,
+            [repr(x) for x in self.feed_submission_info],
             self.request_id
         )
