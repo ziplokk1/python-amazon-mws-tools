@@ -72,6 +72,14 @@ class _MWS(MWS):
         parsed_response.response = response
         return parsed_response
 
+    def get_service_status(self):
+        """
+            Returns a GREEN, GREEN_I, YELLOW or RED status.
+            Depending on the status/availability of the API its being called from.
+        """
+
+        return self.request(extra_data=dict(Action='GetServiceStatus'))
+
 
 class OverrideFeeds(_MWS):
     """ Amazon MWS Feeds API """
