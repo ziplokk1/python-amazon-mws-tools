@@ -1,12 +1,67 @@
 import urllib
 
-from requests import request, Session
+from requests import Session, Response
+from requests.adapters import HTTPAdapter, CaseInsensitiveDict, get_encoding_from_headers, extract_cookies_to_jar
 from mws.mws import MWS, remove_empty, DictWrapper, DataWrapper, calc_md5
+
+from mwstools.parsers.errors import ErrorResponse
 
 try:
     from xml.etree.ElementTree import ParseError as XMLError
 except ImportError:
     from xml.parsers.expat import ExpatError as XMLError
+
+
+class MWSResponse(Response):
+
+    def raise_for_api_error(self):
+        """
+        Parse the response content to get an error if exists and raise it.
+
+        :return:
+        """
+        e = ErrorResponse.load(self.content)
+        e.raise_for_error()
+
+    def raise_for_status(self):
+        self.raise_for_api_error()
+        super(MWSResponse, self).raise_for_status()
+
+
+class AmazonAdapter(HTTPAdapter):
+    """
+    Used to apply our custom response class.
+    """
+
+    adapter_prefix = 'https://mws.amazonservices.com'
+
+    def build_response(self, req, resp):
+        response = MWSResponse()
+
+        # Fallback to None if there's no status_code, for whatever reason.
+        response.status_code = getattr(resp, 'status', None)
+
+        # Make headers case-insensitive.
+        response.headers = CaseInsensitiveDict(getattr(resp, 'headers', {}))
+
+        # Set encoding.
+        response.encoding = get_encoding_from_headers(response.headers)
+        response.raw = resp
+        response.reason = response.raw.reason
+
+        if isinstance(req.url, bytes):
+            response.url = req.url.decode('utf-8')
+        else:
+            response.url = req.url
+
+        # Add new cookies from the server.
+        extract_cookies_to_jar(response.cookies, req, resp)
+
+        # Give the Response some context.
+        response.request = req
+        response.connection = self
+
+        return response
 
 
 class _MWS(MWS):
@@ -24,6 +79,7 @@ class _MWS(MWS):
         else:
             session = Session()
         self.session = session
+        self.session.mount(AmazonAdapter.adapter_prefix, AmazonAdapter())
         MWS.__init__(self, *args, **kwargs)
 
     def request(self, extra_data, method="GET", **kwargs):

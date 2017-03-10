@@ -11,7 +11,6 @@ class GetCompetitivePricingForAsinRequester(object):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.api = OverrideProducts(*args, **kwargs)
 
-    @raise_response_for_error
     def _request(self, marketplaceid, asins):
         response = self.api.get_competitive_pricing_for_asin(marketplaceid, asins)
         response.raise_for_status()
@@ -75,7 +74,6 @@ class GetMyFeesEstimateRequester(object):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.api = OverrideProducts(*args, **kwargs)
 
-    @raise_response_for_error
     def _request(self, marketplaceid, asins=()):
         estimate_requests = [self.api.gen_fees_estimate_request(marketplaceid, a, identifier='request-{}'.format(a)) for a in asins]
         response = self.api.get_my_fees_estimate(estimate_requests)

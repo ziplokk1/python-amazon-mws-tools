@@ -5,10 +5,11 @@ import requests
 from mwstools.parsers.errors import ErrorElement
 from mwstools.parsers.orders import ListOrdersResponse
 from mwstools.requesters.orders import ListOrdersRequester
+from mwstools.mws_overrides import MWSResponse
 
 
 def make_response(status_code, body):
-    r = requests.Response()
+    r = MWSResponse()
     r.status_code = status_code
     r._content = body
     return r
@@ -56,6 +57,10 @@ class TestListOrdersRequesterServerError(TestCase):
 
 
 class TestListOrdersRequesterClientError(TestCase):
+    """
+    Despite the 400 status code, there is still a body and should be raised with ErrorElement.
+    """
+
     body = """
     <ErrorResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01">
         <Error>
@@ -75,7 +80,7 @@ class TestListOrdersRequesterClientError(TestCase):
         self.requester.request()
 
     def test_request(self):
-        self.assertRaises(requests.HTTPError, self.raise_failed_request)
+        self.assertRaises(ErrorElement, self.raise_failed_request)
 
 
 class TestListOrdersRequesterSuccess(TestCase):
