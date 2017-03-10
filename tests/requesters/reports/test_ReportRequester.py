@@ -1,10 +1,11 @@
 from unittest import TestCase, TestSuite, makeSuite, main
-from requests import Response, HTTPError
+from requests import HTTPError
 
 from mws.mws import DictWrapper
 
 from mwstools.parsers.errors import ErrorElement
 from mwstools.requesters.reports import ReportRequester
+from mwstools.mws_overrides import MWSResponse
 
 
 successful_body = """
@@ -26,7 +27,7 @@ no_body = """"""
 
 
 def make_response(status_code, body):
-    r = Response()
+    r = MWSResponse()
     r.status_code = status_code
     r._content = body
     return r

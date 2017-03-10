@@ -19,7 +19,6 @@ class ReportRequester(object):
                                    region=region, domain=domain, uri=uri, version=version)
         self.report_type = report_type
 
-    @raise_for_error
     def _request(self, start_date=None, end_date=None, marketplaceids=()):
         """
         Send request to amazon to request new report for instances report type.
@@ -39,7 +38,6 @@ class ReportRequester(object):
     def request(self, start_date=None, end_date=None, marketplaceids=()):
         return RequestReportResponse.load(self._request(start_date, end_date, marketplaceids))
 
-    @raise_for_error
     def _get_report_status(self, report_request_id):
         self.logger.debug('getting report request list for request id {}'.format(report_request_id))
         response = self.api.get_report_request_list(requestids=(report_request_id,))
