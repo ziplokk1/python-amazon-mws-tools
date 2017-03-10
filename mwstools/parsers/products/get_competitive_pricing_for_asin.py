@@ -1,5 +1,5 @@
 from ..base import BaseElementWrapper, first_element, parse_bool
-from .errors import ProductError
+from .errors import ProductErrorElement, ProductError
 from .base import API_VERSION
 
 
@@ -144,7 +144,7 @@ class Product(BaseElementWrapper):
     @property
     def error(self):
         if self._error is not None:
-            return ProductError(self._error, self.asin, self.status)
+            return ProductErrorElement(self._error, self.asin, self.status)
         return None
 
     def competitive_prices(self):
@@ -187,7 +187,7 @@ class Product(BaseElementWrapper):
 
     def raise_for_error(self):
         if self.error:
-            raise self.error
+            raise ProductError(self.error.type, self.error.code, self.error.message, self.asin, self.status)
 
     def __repr__(self):
         return '<{} asin={} status={} price={} rank={}>'.format(

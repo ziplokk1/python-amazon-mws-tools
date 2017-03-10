@@ -1,5 +1,5 @@
 from ..base import BaseElementWrapper, first_element, parse_bool, parse_date
-from .errors import FeesError
+from .errors import FeesError, ProductErrorElement
 
 
 class FeeDetail(BaseElementWrapper):
@@ -144,8 +144,12 @@ class FeesEstimateResult(BaseElementWrapper):
     def _error(self):
         return self.xpath('./a:Error')
 
+    @property
+    def error(self):
+        return ProductErrorElement(self._error, self.id_value, self.status)
+
     def as_error(self):
-        return FeesError(self._error, self.id_value, self.status)
+        return FeesError(self.error.type, self.error.code, self.error.message, self.id_value, self.status)
 
 
 class GetMyFeesEstimateResponse(BaseElementWrapper):

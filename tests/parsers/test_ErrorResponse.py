@@ -1,6 +1,6 @@
 import unittest
 
-from mwstools.parsers.errors import ErrorResponse, _strip_namespace, ErrorElement
+from mwstools.parsers.errors import ErrorResponse, _strip_namespace, ErrorElement, InvalidParameterValue
 
 
 class ErrorResponseTests(unittest.TestCase):
@@ -34,7 +34,7 @@ class ErrorResponseTests(unittest.TestCase):
         self.assertEqual(self.parser.request_id, 'request-id')
 
     def test_raise_for_error(self):
-        self.assertRaises(ErrorElement, self.parser.raise_for_error)
+        self.assertRaises(InvalidParameterValue, self.parser.raise_for_error)
 
     def test__error(self):
         self.assertIsNotNone(self.parser._error)
