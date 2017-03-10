@@ -4,10 +4,11 @@ import requests
 
 from mwstools.requesters.orders import ListOrderItemsRequester, ListOrderItemsResponse
 from mwstools.parsers.errors import ErrorElement
+from mwstools.mws_overrides import MWSResponse
 
 
 def make_response(status_code, body):
-    r = requests.Response()
+    r = MWSResponse()
     r.status_code = status_code
     r._content = body
     return r
@@ -33,11 +34,8 @@ class TestListOrderItemsRequesterFailedBody(TestCase):
         self.requester = ListOrderItemsRequester(None, None, None)
         self.requester.api.list_order_items = lambda *args, **kwargs: make_response(200, self.body)
 
-    def raise_failed_request(self):
-        self.requester.request(None)
-
     def test_request(self):
-        self.assertRaises(ErrorElement, self.raise_failed_request)
+        self.assertRaises(ErrorElement, self.requester.request, None)
 
 
 class TestListOrderItemsRequesterServerError(TestCase):
@@ -74,7 +72,7 @@ class TestListOrderItemsRequesterClientError(TestCase):
         self.requester.request(None)
 
     def test_request(self):
-        self.assertRaises(requests.HTTPError, self.raise_failed_request)
+        self.assertRaises(ErrorElement, self.raise_failed_request)
 
 
 class TestListOrderItemsRequesterSuccess(TestCase):
