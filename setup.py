@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 version = '0.0.2'
 
@@ -9,12 +9,7 @@ REQUIREMENTS = [
     'requests'
 ]
 
-PACKAGES = [
-    'mwstools',
-    'mwstools.parsers',
-    'mwstools.parsers.products'
-    'mwstools.requesters'
-]
+PACKAGES = find_packages()
 
 setup(
     name='python-amazon-mws-tools',
