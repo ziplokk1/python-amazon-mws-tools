@@ -32,7 +32,75 @@ def strip_namespace(element):
     return element
 
 
-class ErrorElement(BaseElementWrapper, Exception):
+class MwsResponseError(Exception):
+
+    def __init__(self, type, code, message):
+        self.type = type
+        self.code = code
+        self.message = message
+        super(MwsResponseError, self).__init__(self, message)
+
+    def __str__(self):
+        return self.message
+
+
+class InputStreamDisconnected(MwsResponseError):
+    pass
+
+
+class InvalidParameterValue(MwsResponseError):
+    pass
+
+
+class AccessDenied(MwsResponseError):
+    pass
+
+
+class InvalidAccessKey(MwsResponseError):
+    pass
+
+
+class SignatureDoesNotMatch(MwsResponseError):
+    pass
+
+
+class InvalidAddress(MwsResponseError):
+    pass
+
+
+class InternalError(MwsResponseError):
+    pass
+
+
+class QuotaExceeded(MwsResponseError):
+    pass
+
+
+class RequestThrottled(MwsResponseError):
+    pass
+
+
+_errors = {
+    'InputStreamDisconnected': InputStreamDisconnected,
+    'InvalidParameterValue': InvalidParameterValue,
+    'AccessDenied': AccessDenied,
+    'InvalidAccessKey': InvalidAccessKey,
+    'SignatureDoesNotMatch': SignatureDoesNotMatch,
+    'InvalidAddress': InvalidAddress,
+    'InternalError': InternalError,
+    'QuotaExceeded': QuotaExceeded,
+    'RequestThrottled': RequestThrottled
+}
+
+
+def get_proper_error(error):
+    E = _errors.get(error.code)
+    if not E:
+        return MwsResponseError(error.type, error.code, error.message)
+    return E(error.type, error.code, error.message)
+
+
+class ErrorElement(BaseElementWrapper):
 
     """
     Root element of <Error />
@@ -77,9 +145,6 @@ class ErrorElement(BaseElementWrapper, Exception):
             self.message
         )
 
-    def __str__(self):
-        return '{}: {}'.format(self.code, self.message)
-
 
 class ErrorResponse(BaseElementWrapper):
 
@@ -109,7 +174,7 @@ class ErrorResponse(BaseElementWrapper):
 
     def raise_for_error(self):
         if self.error:
-            raise self.error
+            raise get_proper_error(self.error)
 
     def __repr__(self):
         return "<{} request_id={} code={} message={}>".format(

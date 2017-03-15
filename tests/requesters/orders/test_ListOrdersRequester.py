@@ -2,7 +2,7 @@ from unittest import TestCase, TestSuite, makeSuite, main
 
 import requests
 
-from mwstools.parsers.errors import ErrorElement
+from mwstools.parsers.errors import ErrorElement, InvalidParameterValue
 from mwstools.parsers.orders import ListOrdersResponse
 from mwstools.requesters.orders import ListOrdersRequester
 from mwstools.mws_overrides import MWSResponse
@@ -39,7 +39,7 @@ class TestListOrdersRequesterFailedBody(TestCase):
         self.requester.request()
 
     def test_request(self):
-        self.assertRaises(ErrorElement, self.raise_failed_request)
+        self.assertRaises(InvalidParameterValue, self.raise_failed_request)
 
 
 class TestListOrdersRequesterServerError(TestCase):
@@ -80,7 +80,7 @@ class TestListOrdersRequesterClientError(TestCase):
         self.requester.request()
 
     def test_request(self):
-        self.assertRaises(ErrorElement, self.raise_failed_request)
+        self.assertRaises(InvalidParameterValue, self.raise_failed_request)
 
 
 class TestListOrdersRequesterSuccess(TestCase):

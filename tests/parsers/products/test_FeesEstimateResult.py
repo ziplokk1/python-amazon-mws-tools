@@ -174,7 +174,9 @@ class TestMissingCategoryFeesEstimateResult(TestCase):
         self.assertIsInstance(self.parser.as_error(), FeesError)
 
     def test_as_error_raises(self):
-        self.assertRaises(FeesError, self.raise_error)
+        def _raise():
+            raise self.parser.as_error()
+        self.assertRaises(FeesError, _raise)
 
     def test_as_error_code(self):
         self.assertEqual(self.parser.as_error().code, 'DataNotAvailable')

@@ -1,6 +1,7 @@
 from unittest import TestCase, TestSuite, makeSuite, main
 
-from mwstools.parsers.products import Product, ProductError
+from mwstools.parsers.products import Product, ProductErrorElement
+from mwstools.parsers.products.errors import ProductError
 
 
 class TestClientError(TestCase):
@@ -121,7 +122,7 @@ class TestNoCompetitivePrices(TestCase):
     def test_raise(self):
         try:
             self.parser.raise_for_error()
-        except ProductError:
+        except ProductErrorElement:
             self.fail('raise_for_error() raised ProductError unexpectedly.')
 
 
@@ -216,7 +217,7 @@ class TestMultipleSalesRankings(TestCase):
     def test_raise(self):
         try:
             self.parser.raise_for_error()
-        except ProductError:
+        except ProductErrorElement:
             self.fail('raise_for_error() raised ProductError unexpectedly.')
 
 
@@ -298,7 +299,7 @@ class TestProductNoRanking(TestCase):
     def test_raise(self):
         try:
             self.parser.raise_for_error()
-        except ProductError:
+        except ProductErrorElement:
             self.fail('raise_for_error() raised ProductError unexpectedly.')
 
 
@@ -388,7 +389,7 @@ class TestProductSuccess(TestCase):
     def test_raise(self):
         try:
             self.parser.raise_for_error()
-        except ProductError:
+        except ProductErrorElement:
             self.fail('raise_for_error() raised ProductError unexpectedly.')
 
 

@@ -3,7 +3,7 @@ from requests import HTTPError
 
 from mws.mws import DictWrapper
 
-from mwstools.parsers.errors import ErrorElement
+from mwstools.parsers.errors import ErrorElement, InvalidParameterValue
 from mwstools.requesters.reports import ReportRequester
 from mwstools.mws_overrides import MWSResponse
 
@@ -53,14 +53,14 @@ class TestReportRequesterErrorResponse(TestCase):
         Make sure that the test fails when an error response comes back.
         :return:
         """
-        self.assertRaises(ErrorElement, self.raise_error_element_request)
+        self.assertRaises(InvalidParameterValue, self.raise_error_element_request)
 
     def test_error_get_report_status(self):
         """
         Make sure that the test fails when an error response comes back.
         :return:
         """
-        self.assertRaises(ErrorElement, self.raise_error_element_get_report_status)
+        self.assertRaises(InvalidParameterValue, self.raise_error_element_get_report_status)
 
 
 class TestReportRequesterServerError(TestCase):

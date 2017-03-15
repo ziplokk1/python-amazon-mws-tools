@@ -1,5 +1,5 @@
 from ..base import BaseElementWrapper, first_element
-from .errors import ProductError
+from .errors import ProductErrorElement
 
 
 class GetMatchingProductForIdProduct(BaseElementWrapper):
@@ -60,7 +60,7 @@ class GetMatchingProductForIdResult(BaseElementWrapper):
         e = self._error
         if not e:
             return
-        return ProductError(e, self.id_, self.status)
+        return ProductErrorElement(e, self.id_, self.status)
 
 
 class GetMatchingProductForIdResponse(BaseElementWrapper):
