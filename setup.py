@@ -12,12 +12,12 @@ REQUIREMENTS = [
 PACKAGES = [
     'mwstools',
     'mwstools.parsers',
+    'mwstools.parsers.products'
     'mwstools.requesters'
 ]
 
 setup(
     name='python-amazon-mws-tools',
-    version=version,
     packages=PACKAGES,
     url='https://github.com/ziplokk1/python-amazon-mws-tools',
     license='LICENSE.txt',
