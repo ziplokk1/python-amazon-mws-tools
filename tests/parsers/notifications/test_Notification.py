@@ -6,6 +6,15 @@ from unittest import makeSuite
 from mwstools.parsers.notifications import Notification
 
 
+class Dummy(object):
+    """
+    Only used for test_notification_payload since there is not actually a payload to test.
+    """
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+
 class TestNotification(TestCase):
 
     body = """
@@ -26,7 +35,7 @@ class TestNotification(TestCase):
         self.assertIsNotNone(self.parser.notification_metadata)
 
     def test_notification_payload(self):
-        self.assertIsNotNone(self.parser.notification_payload(None))
+        self.assertIsNotNone(self.parser.notification_payload(Dummy))
 
 __all__ = [
     TestNotification
