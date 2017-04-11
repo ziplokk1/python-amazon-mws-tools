@@ -49,13 +49,13 @@ class TestOrderSuccess(TestCase):
         self.parser = Order.load(self.body)
 
     def test_latest_ship_date(self):
-        self.assertEqual(self.parser.latest_ship_date, datetime.datetime(2016, 12, 21, 11, 14, 23))
+        self.assertEqual(self.parser.latest_ship_date, datetime.datetime(2016, 12, 21, 12, 14, 23))
 
     def test_order_type(self):
         self.assertEqual(self.parser.order_type, 'StandardOrder')
 
     def test_purchase_date(self):
-        self.assertEqual(self.parser.purchase_date, datetime.datetime(2016, 12, 20, 18, 55, 17))
+        self.assertEqual(self.parser.purchase_date, datetime.datetime(2016, 12, 20, 19, 55, 17))
 
     def test_buyer_email(self):
         self.assertEqual(self.parser.buyer_email, 'email@marketplace.amazon.com')
@@ -64,7 +64,7 @@ class TestOrderSuccess(TestCase):
         self.assertEqual(self.parser.amazon_order_id, 'xxx-xxxxxxx-xxxxxxx')
 
     def test_last_update_date(self):
-        self.assertEqual(self.parser.last_update_date, datetime.datetime(2016, 12, 21, 11, 39, 55))
+        self.assertEqual(self.parser.last_update_date, datetime.datetime(2016, 12, 21, 12, 39, 55))
 
     def test_number_of_items_shipped(self):
         self.assertEqual(self.parser.number_of_items_shipped, '1')
@@ -101,7 +101,7 @@ class TestOrderSuccess(TestCase):
         self.fail()
 
     def test_earliest_ship_date(self):
-        self.assertEqual(self.parser.earliest_ship_date, datetime.datetime(2016, 12, 21, 11, 14, 23))
+        self.assertEqual(self.parser.earliest_ship_date, datetime.datetime(2016, 12, 21, 12, 14, 23))
 
     def test_marketplace_id(self):
         self.assertEqual(self.parser.marketplace_id, 'marketplace-id')

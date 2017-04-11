@@ -29,7 +29,7 @@ class TestGetServiceStatusResponse(TestCase):
         self.assertEqual(self.parser.status, 'GREEN')
 
     def test_timestamp(self):
-        self.assertEqual(self.parser.timestamp, datetime.datetime(2017, 2, 21))
+        self.assertEqual(self.parser.timestamp, datetime.datetime(2017, 2, 21, 1))
 
     def test_request_id(self):
         self.assertEqual(self.parser.request_id, 'request-id')

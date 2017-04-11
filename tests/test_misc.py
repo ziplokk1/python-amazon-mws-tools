@@ -68,7 +68,7 @@ class WrapperFunctionTests(unittest.TestCase):
         def bogus():
             return '2001-01-01T06:00:00+00:00'
 
-        self.assertEqual(parse_date(bogus)(), datetime.datetime(2001, 1, 1, 0, 0, 0))
+        self.assertEqual(parse_date(bogus)(), datetime.datetime(2001, 1, 1, 1, 0, 0))
 
 
 __all__ = [

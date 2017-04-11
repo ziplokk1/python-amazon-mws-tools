@@ -31,25 +31,25 @@ class TestReportRequestInfoSuccess(TestCase):
         self.assertEqual(self.parser.report_type, '_ENUMERATION_TYPE_')
 
     def test_start_date(self):
-        self.assertEqual(self.parser.start_date, datetime.datetime(2016, 11, 16, 0, 0, 0))
+        self.assertEqual(self.parser.start_date, datetime.datetime(2016, 11, 16, 1, 0, 0))
 
     def test_end_date(self):
-        self.assertEqual(self.parser.end_date, datetime.datetime(2016, 12, 16, 0, 0, 0))
+        self.assertEqual(self.parser.end_date, datetime.datetime(2016, 12, 16, 1, 0, 0))
 
     def test_scheduled(self):
         self.assertFalse(self.parser.scheduled)
 
     def test_submitted_date(self):
-        self.assertEqual(self.parser.submitted_date, datetime.datetime(2016, 12, 16, 16, 2, 2))
+        self.assertEqual(self.parser.submitted_date, datetime.datetime(2016, 12, 16, 17, 2, 2))
 
     def test_report_processing_status(self):
         self.assertEqual(self.parser.report_processing_status, '_DONE_')
 
     def test_completed_date(self):
-        self.assertEqual(self.parser.completed_date, datetime.datetime(2016, 12, 16, 16, 2, 44))
+        self.assertEqual(self.parser.completed_date, datetime.datetime(2016, 12, 16, 17, 2, 44))
 
     def test_started_processing_date(self):
-        self.assertEqual(self.parser.started_processing_date, datetime.datetime(2016, 12, 16, 16, 2, 7))
+        self.assertEqual(self.parser.started_processing_date, datetime.datetime(2016, 12, 16, 17, 2, 7))
 
     def test_generated_report_id(self):
         self.assertEqual(self.parser.generated_report_id, 'generated-report-id')

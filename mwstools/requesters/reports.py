@@ -8,6 +8,15 @@ from .base import raise_for_error
 from ..mws_overrides import OverrideReports
 
 
+class ReportFailedError(ValueError):
+
+    def __init__(self, report_request_id, status, *args):
+        self.status = status
+        self.report_request_id = report_request_id
+        self.message = 'GetReportRequestList for report_request_id={} returned {}'.format(self.report_request_id, self.status)
+        super(ReportFailedError, self).__init__(self.message, *args)
+
+
 class ReportRequester(object):
     """
     Request wrapper for a single report.
@@ -76,7 +85,7 @@ class ReportRequester(object):
             status = report_status_info.report_processing_status
 
         if status != '_DONE_':
-            raise ValueError("GetReportRequestList for report_request_id={} returned {}".format(report_request_id, status))
+            raise ReportFailedError(report_request_id, status)
         return report_status_info.generated_report_id
 
     def request_and_download(self, start_date=None, end_date=None, marketplaceids=()):

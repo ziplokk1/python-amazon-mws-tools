@@ -34,7 +34,7 @@ class TestNotificationMetadata(TestCase):
         self.assertEqual(self.parser.unique_id, 'unique-id')
 
     def test_publish_time(self):
-        self.assertEqual(self.parser.publish_time, datetime.datetime(2017, 1, 25, 6, 0, 0))
+        self.assertEqual(self.parser.publish_time, datetime.datetime(2017, 1, 25, 7, 0, 0))
 
     def test_seller_id(self):
         self.assertEqual(self.parser.seller_id, 'seller-id')

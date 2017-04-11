@@ -61,7 +61,7 @@ class TestListOrdersResultNextTokenSuccess(TestCase):
         self.parser = ListOrdersResult.load(self.body)
 
     def test_last_updated_before(self):
-        self.assertEqual(self.parser.last_updated_before, datetime.datetime(2016, 12, 23, 10, 59, 21))
+        self.assertEqual(self.parser.last_updated_before, datetime.datetime(2016, 12, 23, 11, 59, 21))
 
     def test__next_token(self):
         self.assertIsNotNone(self.parser._next_token)
@@ -94,7 +94,7 @@ class TestListOrdersResultSuccess(TestCase):
         self.parser = ListOrdersResult.load(self.body)
 
     def test_last_updated_before(self):
-        self.assertEqual(self.parser.last_updated_before, datetime.datetime(2016, 12, 22, 11, 37, 50))
+        self.assertEqual(self.parser.last_updated_before, datetime.datetime(2016, 12, 22, 12, 37, 50))
 
     def test__next_token(self):
         self.assertIsNotNone(self.parser._next_token)

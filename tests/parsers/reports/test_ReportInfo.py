@@ -38,7 +38,7 @@ class TestReportInfoNotAcknowledged(TestCase):
         self.assertEqual(self.parser.report_request_id, 'report-request-id')
 
     def test_available_date(self):
-        self.assertEqual(self.parser.available_date, datetime.datetime(2017, 2, 14))
+        self.assertEqual(self.parser.available_date, datetime.datetime(2017, 2, 14, 1))
 
 
 class TestReportInfoAcknowledged(TestCase):
@@ -64,7 +64,7 @@ class TestReportInfoAcknowledged(TestCase):
         self.assertTrue(self.parser.acknowledged)
 
     def test_acknowledged_date(self):
-        self.assertEqual(self.parser.acknowledged_date, datetime.datetime(2017, 2, 14))
+        self.assertEqual(self.parser.acknowledged_date, datetime.datetime(2017, 2, 14, 1))
 
     def test_report_id(self):
         self.assertEqual(self.parser.report_id, 'report-id')
@@ -73,7 +73,7 @@ class TestReportInfoAcknowledged(TestCase):
         self.assertEqual(self.parser.report_request_id, 'report-request-id')
 
     def test_available_date(self):
-        self.assertEqual(self.parser.available_date, datetime.datetime(2017, 2, 14))
+        self.assertEqual(self.parser.available_date, datetime.datetime(2017, 2, 14, 1))
 
 
 __all__ = [

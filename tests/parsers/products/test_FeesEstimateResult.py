@@ -94,7 +94,7 @@ class TestFeesEstimateResult(TestCase):
         self.assertEqual(self.parser.total_fees_estimate, '18.72')
 
     def test_time_of_fees_estimation(self):
-        self.assertEqual(self.parser.time_of_fees_estimation, datetime.datetime(2016, 11, 30, 6))
+        self.assertEqual(self.parser.time_of_fees_estimation, datetime.datetime(2016, 11, 30, 7))
 
     def test_as_error(self):
         self.assertIsInstance(self.parser.as_error(), FeesError)
