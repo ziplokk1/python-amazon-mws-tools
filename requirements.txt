@@ -1,4 +1,4 @@
-lxml==3.7.1
+lxml==4.9.1
 python-amazon-mws==0.6
 python-dateutil==2.6.0
 requests==2.12.4
